@@ -4,29 +4,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="description" content="식단과 증상을 기록하여 건강 패턴을 파악하세요">
+  <meta name="description" content="식단과 증상을 기록해 주세요.">
   <meta name="theme-color" content="#4A90E2">
 
-  <!-- PWA -->
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="식단증상추적">
+  <meta name="apple-mobile-web-app-title" content="올본식단기록표">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
 
-  <title>식단 및 증상 추적</title>
+  <title>식단기록표</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
   <div class="container">
-    <!-- Header -->
     <header class="app-header">
-      <h1>🏥 식단 & 증상 추적</h1>
-      <p>건강한 식습관을 위한 스마트 기록</p>
+      <h1>🏥 올본 식단기록표</h1>
+      <p>건강을 위한 <span class="user-name"></span> 님의 식단기록표</p>
     </header>
 
-    <!-- Settings Panel (shown only if API URL is not set) -->
     <div id="settingsPanel" class="settings-panel" style="display: none;">
       <label for="apiUrl">Google Apps Script 웹 앱 URL</label>
       <input type="text" id="apiUrl" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off">
@@ -34,9 +31,7 @@
       <div id="settingsStatus"></div>
     </div>
 
-    <!-- Main App -->
     <div id="mainApp" style="display: none;">
-      <!-- Tabs -->
       <div class="tabs">
         <button class="tab-button active" data-tab="food" onclick="app.switchTab('food')">
           🍽️ 식단 기록
@@ -52,29 +47,24 @@
         </button>
       </div>
 
-      <!-- Food Tab -->
       <div id="foodTab" class="tab-content active">
         <div class="card">
           <h2>🍽️ 식단 기록</h2>
 
-          <!-- Selection Summary -->
           <div id="foodSelection" class="selection-summary">
-            <div class="selection-placeholder">음식을 선택해주세요</div>
+            <div class="selection-placeholder">지금 먹은 음식을 선택해주세요</div>
           </div>
 
-          <!-- Main Foods -->
           <h3>주요 음식</h3>
           <div id="mainFoods" class="button-grid">
             <div class="loading">로딩 중</div>
           </div>
 
-          <!-- Recent Foods -->
           <h3>최근 입력</h3>
           <div id="recentFoods" class="button-grid">
             <div class="empty-state">최근 기록이 없습니다</div>
           </div>
 
-          <!-- Search -->
           <h3>음식 검색</h3>
           <div class="search-container">
             <span class="search-icon">🔍</span>
@@ -83,7 +73,6 @@
           </div>
           <div id="searchResults" class="button-grid"></div>
 
-          <!-- Custom Input -->
           <h3>직접 입력</h3>
           <div class="custom-input-container">
             <input type="text" id="customFoodInput" class="custom-input" placeholder="목록에 없는 음식 입력..."
@@ -91,7 +80,6 @@
             <button class="btn btn-primary" onclick="app.addCustomFood()">➕ 추가</button>
           </div>
 
-          <!-- Save Button -->
           <button class="btn btn-success" onclick="app.saveFoodRecord()" style="width: 100%; margin-top: 1rem;">
             ✅ 식단 기록 저장
           </button>
@@ -100,23 +88,19 @@
         </div>
       </div>
 
-      <!-- Symptom Tab -->
       <div id="symptomTab" class="tab-content">
         <div class="card">
           <h2>💊 증상 기록</h2>
 
-          <!-- Selection Summary -->
           <div id="symptomSelection" class="selection-summary">
-            <div class="selection-placeholder">증상을 선택해주세요</div>
+            <div class="selection-placeholder">지금 느낀 증상을 선택해주세요</div>
           </div>
 
-          <!-- Main Symptoms -->
           <h3>주요 증상</h3>
           <div id="mainSymptoms" class="button-grid">
             <div class="loading">로딩 중</div>
           </div>
 
-          <!-- Custom Input -->
           <h3>직접 입력</h3>
           <div class="custom-input-container">
             <input type="text" id="customSymptomInput" class="custom-input" placeholder="목록에 없는 증상 입력..."
@@ -124,7 +108,6 @@
             <button class="btn btn-primary" onclick="app.addCustomSymptom()">➕ 추가</button>
           </div>
 
-          <!-- Save Button -->
           <button class="btn btn-success" onclick="app.saveSymptomRecord()" style="width: 100%; margin-top: 1rem;">
             ✅ 증상 기록 저장
           </button>
@@ -133,7 +116,6 @@
         </div>
       </div>
 
-      <!-- Records Tab -->
       <div id="recordsTab" class="tab-content">
         <div class="card">
           <h2>📊 기록 보기</h2>
@@ -150,7 +132,6 @@
         </div>
       </div>
 
-      <!-- Analysis Tab -->
       <div id="analysisTab" class="tab-content">
         <div class="card">
           <h2>📈 식단-증상 상관관계 분석</h2>
@@ -172,10 +153,32 @@
   </div>
 
   <footer class="app-footer">
-    이 프로그램은 올본한의원에서 하도영 님을 위해 제공하고 있습니다.
+    이 프로그램은 올본한의원에서 <span class="user-name"></span> 님을 위해 제공하고 있습니다.
   </footer>
 
   <script src="app.js"></script>
+
+  <script>
+    /**
+     * 이곳의 이름만 수정하면 전체 페이지에 반영됩니다.
+     */
+    const CLIENT_NAME = "하도영";
+
+    document.addEventListener("DOMContentLoaded", function() {
+      // 1. 브라우저 탭 이름 변경
+      document.title = `${CLIENT_NAME} 님 식단기록표`;
+
+      // 2. 본문 내 'user-name' 클래스를 가진 모든 요소에 이름 삽입
+      const nameNodes = document.querySelectorAll('.user-name');
+      nameNodes.forEach(node => {
+        node.textContent = CLIENT_NAME;
+      });
+      
+      // 3. (옵션) 모바일 홈 화면 이름 설정 반영
+      const metaTitle = document.querySelector('meta[name="apple-mobile-web-app-title"]');
+      if (metaTitle) metaTitle.setAttribute("content", `${CLIENT_NAME} 식단기록`);
+    });
+  </script>
 </body>
 
 </html>
