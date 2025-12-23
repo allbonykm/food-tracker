@@ -22,6 +22,16 @@ const app = {
       document.getElementById('mainApp').style.display = 'none';
     }
 
+    // URL 파라미터에서 admin 모드 확인
+    const urlParams = new URLSearchParams(window.location.search);
+    const isAdmin = urlParams.get('admin') === 'true';
+
+    // 분석 탭 표시/숨김
+    const analysisTab = document.querySelector('[data-tab="analysis"]');
+    if (analysisTab) {
+      analysisTab.style.display = isAdmin ? 'inline-block' : 'none';
+    }
+
     // Service Worker 등록
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js').catch(err => {
@@ -494,9 +504,27 @@ const app = {
       let html = '';
       Object.keys(recordsByDate).sort().reverse().forEach(date => {
         const records = recordsByDate[date];
+
+        // 날짜 헤더 포맷팅 (요일 포함)
+        let formattedHeader;
+        try {
+          const dateObj = new Date(date);
+          if (!isNaN(dateObj.getTime())) {
+            const month = dateObj.getMonth() + 1;
+            const day = dateObj.getDate();
+            const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+            const weekday = weekdays[dateObj.getDay()];
+            formattedHeader = `${month}월 ${day}일 (${weekday})`;
+          } else {
+            formattedHeader = date;
+          }
+        } catch (e) {
+          formattedHeader = date;
+        }
+
         html += `
           <div class="record-day">
-            <h3>${this.formatDate(date)}</h3>
+            <h3>${formattedHeader}</h3>
             ${records.map(record => `
               <div class="record-item ${record.type}">
                 <div class="record-time">${record.time}</div>
