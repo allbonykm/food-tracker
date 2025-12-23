@@ -1,6 +1,6 @@
 {
   "name": "[올본] 식단 기록하기",
-  "short_name": "올본한의원",
+  "short_name": "식단기록",
   "description": "올본한의원에서 제공합니다. 식단과 증상을 잘 기록해 주세요.",
   "start_url": "./index.html",
   "display": "standalone",
@@ -10,17 +10,16 @@
   "lang": "ko",
   "icons": [
     {
-      "src": "icons/icon-192.png",
+      "src": "icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icons/icon-512.png",
+      "src": "icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     }
   ]
 }
-
