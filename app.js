@@ -81,17 +81,18 @@ const app = {
   // API 호출
   async callApi(action, data = {}) {
     try {
-      const response = await fetch(this.apiUrl, {
-        method: 'POST',
+      // URL 파라미터 생성
+      const params = new URLSearchParams({
+        action: action,
+        ...data
+      });
+
+      const url = `${this.apiUrl}?${params.toString()}`;
+
+      const response = await fetch(url, {
+        method: 'GET',
         mode: 'cors',
         cache: 'no-cache',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          action: action,
-          ...data
-        }),
         redirect: 'follow'
       });
 
@@ -333,7 +334,7 @@ const app = {
       const result = await this.callApi('saveFoodRecord', {
         date: date,
         time: time,
-        foods: Array.from(this.selectedFoods)
+        foods: JSON.stringify(Array.from(this.selectedFoods))
       });
 
       this.showMessage('foodMessage', result.message, 'success');
@@ -365,7 +366,7 @@ const app = {
       const result = await this.callApi('saveSymptomRecord', {
         date: date,
         time: time,
-        symptoms: Array.from(this.selectedSymptoms)
+        symptoms: JSON.stringify(Array.from(this.selectedSymptoms))
       });
 
       this.showMessage('symptomMessage', result.message, 'success');
