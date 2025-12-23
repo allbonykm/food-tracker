@@ -8,6 +8,14 @@ const app = {
   selectedSymptoms: new Set(),
   allFoods: [],
 
+  // 캐시 설정
+  CACHE_KEYS: {
+    MAIN_FOODS: 'foodTracker_mainFoods',
+    MAIN_SYMPTOMS: 'foodTracker_mainSymptoms',
+    TIMESTAMP: 'foodTracker_cacheTimestamp'
+  },
+  CACHE_DURATION: 24 * 60 * 60 * 1000, // 24시간 (밀리초)
+
   // 초기화
   init() {
     // API URL이 코드에 미리 설정되어 있으므로 바로 메인 앱 표시
@@ -112,44 +120,108 @@ const app = {
     }
   },
 
+  // 캐시 저장
+  saveToCache(key, data) {
+    try {
+      localStorage.setItem(key, JSON.stringify(data));
+      localStorage.setItem(this.CACHE_KEYS.TIMESTAMP, Date.now().toString());
+    } catch (error) {
+      console.error('캐시 저장 실패:', error);
+    }
+  },
+
+  // 캐시 읽기
+  getFromCache(key) {
+    try {
+      const cached = localStorage.getItem(key);
+      return cached ? JSON.parse(cached) : null;
+    } catch (error) {
+      console.error('캐시 읽기 실패:', error);
+      return null;
+    }
+  },
+
+  // 캐시 유효성 검사
+  isCacheValid() {
+    try {
+      const timestamp = localStorage.getItem(this.CACHE_KEYS.TIMESTAMP);
+      if (!timestamp) return false;
+      const elapsed = Date.now() - parseInt(timestamp);
+      return elapsed < this.CACHE_DURATION;
+    } catch (error) {
+      console.error('캐시 검증 실패:', error);
+      return false;
+    }
+  },
+
   // 주요 음식 로드
   async loadMainFoods() {
-    try {
-      const result = await this.callApi('getMainFoods');
-      const container = document.getElementById('mainFoods');
-      container.innerHTML = '';
+    const container = document.getElementById('mainFoods');
 
-      result.foods.forEach(food => {
-        const btn = document.createElement('button');
-        btn.className = 'btn btn-food';
-        btn.textContent = food;
-        btn.onclick = () => this.toggleFood(food, btn);
-        container.appendChild(btn);
-      });
-    } catch (error) {
-      document.getElementById('mainFoods').innerHTML =
-        '<div class="empty-state">음식을 불러올 수 없습니다</div>';
+    // 캐시된 데이터가 있고 유효하면 먼저 표시
+    const cached = this.getFromCache(this.CACHE_KEYS.MAIN_FOODS);
+    if (cached && this.isCacheValid()) {
+      this.renderFoods(cached, container);
     }
+
+    try {
+      // 백그라운드에서 새 데이터 로드
+      const result = await this.callApi('getMainFoods');
+      this.renderFoods(result.foods, container);
+      this.saveToCache(this.CACHE_KEYS.MAIN_FOODS, result.foods);
+    } catch (error) {
+      // 캐시도 없고 API도 실패하면 에러 표시
+      if (!cached) {
+        container.innerHTML = '<div class="empty-state">음식을 불러올 수 없습니다</div>';
+      }
+    }
+  },
+
+  // 음식 렌더링 헬퍼
+  renderFoods(foods, container) {
+    container.innerHTML = '';
+    foods.forEach(food => {
+      const btn = document.createElement('button');
+      btn.className = 'btn btn-food';
+      btn.textContent = food;
+      btn.onclick = () => this.toggleFood(food, btn);
+      container.appendChild(btn);
+    });
   },
 
   // 주요 증상 로드
   async loadMainSymptoms() {
-    try {
-      const result = await this.callApi('getMainSymptoms');
-      const container = document.getElementById('mainSymptoms');
-      container.innerHTML = '';
+    const container = document.getElementById('mainSymptoms');
 
-      result.symptoms.forEach(symptom => {
-        const btn = document.createElement('button');
-        btn.className = 'btn btn-symptom';
-        btn.textContent = symptom;
-        btn.onclick = () => this.toggleSymptom(symptom, btn);
-        container.appendChild(btn);
-      });
-    } catch (error) {
-      document.getElementById('mainSymptoms').innerHTML =
-        '<div class="empty-state">증상을 불러올 수 없습니다</div>';
+    // 캐시된 데이터가 있고 유효하면 먼저 표시
+    const cached = this.getFromCache(this.CACHE_KEYS.MAIN_SYMPTOMS);
+    if (cached && this.isCacheValid()) {
+      this.renderSymptoms(cached, container);
     }
+
+    try {
+      // 백그라운드에서 새 데이터 로드
+      const result = await this.callApi('getMainSymptoms');
+      this.renderSymptoms(result.symptoms, container);
+      this.saveToCache(this.CACHE_KEYS.MAIN_SYMPTOMS, result.symptoms);
+    } catch (error) {
+      // 캐시도 없고 API도 실패하면 에러 표시
+      if (!cached) {
+        container.innerHTML = '<div class="empty-state">증상을 불러올 수 없습니다</div>';
+      }
+    }
+  },
+
+  // 증상 렌더링 헬퍼
+  renderSymptoms(symptoms, container) {
+    container.innerHTML = '';
+    symptoms.forEach(symptom => {
+      const btn = document.createElement('button');
+      btn.className = 'btn btn-symptom';
+      btn.textContent = symptom;
+      btn.onclick = () => this.toggleSymptom(symptom, btn);
+      container.appendChild(btn);
+    });
   },
 
   // 최근 음식 로드
