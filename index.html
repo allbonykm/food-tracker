@@ -11,7 +11,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="올본식단기록표">
-  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192x192.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512x512.png">
 
   <title>식단기록표</title>
   <link rel="stylesheet" href="styles.css">
@@ -164,7 +165,7 @@
      */
     const CLIENT_NAME = "하도영";
 
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
       // 1. 브라우저 탭 이름 변경
       document.title = `${CLIENT_NAME} 님 식단기록표`;
 
@@ -173,7 +174,7 @@
       nameNodes.forEach(node => {
         node.textContent = CLIENT_NAME;
       });
-      
+
       // 3. (옵션) 모바일 홈 화면 이름 설정 반영
       const metaTitle = document.querySelector('meta[name="apple-mobile-web-app-title"]');
       if (metaTitle) metaTitle.setAttribute("content", `${CLIENT_NAME} 식단기록`);
