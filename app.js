@@ -3,24 +3,17 @@
  */
 
 const app = {
-  apiUrl: '',
+  apiUrl: 'https://script.google.com/macros/s/AKfycbwC7-_PomabMuoOg0hOUhSLAyXmpl-8kyWono9_vCtI1B5sK2EPyrrSVbXLbMneFNg6/exec',
   selectedFoods: new Set(),
   selectedSymptoms: new Set(),
   allFoods: [],
 
   // 초기화
   init() {
-    // LocalStorage에서 API URL 불러오기
-    this.apiUrl = localStorage.getItem('apiUrl') || '';
-
-    if (this.apiUrl) {
-      document.getElementById('settingsPanel').style.display = 'none';
-      document.getElementById('mainApp').style.display = 'block';
-      this.loadInitialData();
-    } else {
-      document.getElementById('settingsPanel').style.display = 'block';
-      document.getElementById('mainApp').style.display = 'none';
-    }
+    // API URL이 코드에 미리 설정되어 있으므로 바로 메인 앱 표시
+    document.getElementById('settingsPanel').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'block';
+    this.loadInitialData();
 
     // URL 파라미터에서 admin 모드 확인
     const urlParams = new URLSearchParams(window.location.search);
