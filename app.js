@@ -314,6 +314,56 @@ const app = {
     this.updateSymptomSelection();
   },
 
+  // 사용자 정의 음식 추가
+  addCustomFood() {
+    const input = document.getElementById('customFoodInput');
+    const foodName = input.value.trim();
+
+    if (!foodName) {
+      this.showMessage('foodMessage', '음식 이름을 입력해주세요', 'error');
+      return;
+    }
+
+    if (this.selectedFoods.has(foodName)) {
+      this.showMessage('foodMessage', '이미 선택된 음식입니다', 'error');
+      return;
+    }
+
+    // 선택 목록에 추가
+    this.selectedFoods.add(foodName);
+    this.updateFoodSelection();
+
+    // 입력 필드 초기화
+    input.value = '';
+
+    this.showMessage('foodMessage', `"${foodName}" 추가됨`, 'success');
+  },
+
+  // 사용자 정의 증상 추가
+  addCustomSymptom() {
+    const input = document.getElementById('customSymptomInput');
+    const symptomName = input.value.trim();
+
+    if (!symptomName) {
+      this.showMessage('symptomMessage', '증상 이름을 입력해주세요', 'error');
+      return;
+    }
+
+    if (this.selectedSymptoms.has(symptomName)) {
+      this.showMessage('symptomMessage', '이미 선택된 증상입니다', 'error');
+      return;
+    }
+
+    // 선택 목록에 추가
+    this.selectedSymptoms.add(symptomName);
+    this.updateSymptomSelection();
+
+    // 입력 필드 초기화
+    input.value = '';
+
+    this.showMessage('symptomMessage', `"${symptomName}" 추가됨`, 'success');
+  },
+
   // 현재 날짜/시간 가져오기
   getCurrentDateTime() {
     const now = new Date();
@@ -453,6 +503,10 @@ const app = {
                 <div class="record-content">
                   <div class="record-type">${record.type === 'food' ? '식단' : '증상'}</div>
                   ${record.item}
+                </div>
+                <div class="record-actions">
+                  <button class="btn-icon btn-edit" onclick="app.editRecord('${record.type}', '${date}', '${record.time}', '${record.item}')" title="수정">✏️</button>
+                  <button class="btn-icon btn-delete" onclick="app.deleteRecord('${record.type}', '${date}', '${record.time}')" title="삭제">🗑️</button>
                 </div>
               </div>
             `).join('')}
@@ -710,6 +764,58 @@ const app = {
     if (riskScore >= 50) return 'risk-high';
     if (riskScore >= 25) return 'risk-medium';
     return 'risk-low';
+  },
+
+  // 기록 삭제
+  async deleteRecord(type, date, time) {
+    if (!confirm(`${date} ${time}의 기록을 삭제하시겠습니까?`)) {
+      return;
+    }
+
+    try {
+      const result = await this.callApi('deleteRecord', {
+        sheetType: type,
+        date: date,
+        time: time
+      });
+
+      alert(result.message);
+
+      // 기록 목록 새로고침
+      this.loadRecords(7);
+    } catch (error) {
+      alert('삭제 실패: ' + error.message);
+    }
+  },
+
+  // 기록 수정  
+  async editRecord(type, date, time, items) {
+    const newItems = prompt(
+      `수정할 내용을 입력하세요:\n(여러 항목은 쉼표로 구분)`,
+      items
+    );
+
+    if (newItems === null || newItems.trim() === '') {
+      return;
+    }
+
+    try {
+      const itemArray = newItems.split(',').map(item => item.trim()).filter(item => item);
+
+      const result = await this.callApi('updateRecord', {
+        sheetType: type,
+        date: date,
+        time: time,
+        items: JSON.stringify(itemArray)
+      });
+
+      alert(result.message);
+
+      // 기록 목록 새로고침
+      this.loadRecords(7);
+    } catch (error) {
+      alert('수정 실패: ' + error.message);
+    }
   }
 };
 
