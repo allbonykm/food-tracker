@@ -83,6 +83,8 @@ const app = {
     try {
       const response = await fetch(this.apiUrl, {
         method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
         headers: {
           'Content-Type': 'application/json',
         },
