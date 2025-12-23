@@ -83,6 +83,14 @@
           </div>
           <div id="searchResults" class="button-grid"></div>
 
+          <!-- Custom Input -->
+          <h3>직접 입력</h3>
+          <div class="custom-input-container">
+            <input type="text" id="customFoodInput" class="custom-input" placeholder="목록에 없는 음식 입력..."
+              onkeypress="if(event.key==='Enter') app.addCustomFood()">
+            <button class="btn btn-primary" onclick="app.addCustomFood()">➕ 추가</button>
+          </div>
+
           <!-- Save Button -->
           <button class="btn btn-success" onclick="app.saveFoodRecord()" style="width: 100%; margin-top: 1rem;">
             ✅ 식단 기록 저장
@@ -106,6 +114,14 @@
           <h3>주요 증상</h3>
           <div id="mainSymptoms" class="button-grid">
             <div class="loading">로딩 중</div>
+          </div>
+
+          <!-- Custom Input -->
+          <h3>직접 입력</h3>
+          <div class="custom-input-container">
+            <input type="text" id="customSymptomInput" class="custom-input" placeholder="목록에 없는 증상 입력..."
+              onkeypress="if(event.key==='Enter') app.addCustomSymptom()">
+            <button class="btn btn-primary" onclick="app.addCustomSymptom()">➕ 추가</button>
           </div>
 
           <!-- Save Button -->
@@ -154,6 +170,10 @@
       </div>
     </div>
   </div>
+
+  <footer class="app-footer">
+    이 프로그램은 올본한의원에서 하도영 님을 위해 제공하고 있습니다.
+  </footer>
 
   <script src="app.js"></script>
 </body>
