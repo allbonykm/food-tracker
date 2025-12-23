@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="식단과 증상을 기록하여 건강 패턴을 파악하세요">
+  <meta name="theme-color" content="#4A90E2">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="식단증상추적">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+  <title>식단 및 증상 추적</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="app-header">
+      <h1>🏥 식단 & 증상 추적</h1>
+      <p>건강한 식습관을 위한 스마트 기록</p>
+    </header>
+
+    <!-- Settings Panel (shown only if API URL is not set) -->
+    <div id="settingsPanel" class="settings-panel" style="display: none;">
+      <label for="apiUrl">Google Apps Script 웹 앱 URL</label>
+      <input type="text" id="apiUrl" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off">
+      <button class="btn btn-primary" onclick="app.saveApiUrl()">저장</button>
+      <div id="settingsStatus"></div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" style="display: none;">
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab-button active" data-tab="food" onclick="app.switchTab('food')">
+          🍽️ 식단 기록
+        </button>
+        <button class="tab-button" data-tab="symptom" onclick="app.switchTab('symptom')">
+          💊 증상 기록
+        </button>
+        <button class="tab-button" data-tab="records" onclick="app.switchTab('records')">
+          📊 기록 보기
+        </button>
+        <button class="tab-button" data-tab="analysis" onclick="app.switchTab('analysis')">
+          📈 분석
+        </button>
+      </div>
+
+      <!-- Food Tab -->
+      <div id="foodTab" class="tab-content active">
+        <div class="card">
+          <h2>🍽️ 식단 기록</h2>
+
+          <!-- Selection Summary -->
+          <div id="foodSelection" class="selection-summary">
+            <div class="selection-placeholder">음식을 선택해주세요</div>
+          </div>
+
+          <!-- Main Foods -->
+          <h3>주요 음식</h3>
+          <div id="mainFoods" class="button-grid">
+            <div class="loading">로딩 중</div>
+          </div>
+
+          <!-- Recent Foods -->
+          <h3>최근 입력</h3>
+          <div id="recentFoods" class="button-grid">
+            <div class="empty-state">최근 기록이 없습니다</div>
+          </div>
+
+          <!-- Search -->
+          <h3>음식 검색</h3>
+          <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="foodSearch" class="search-input" placeholder="음식 이름으로 검색..."
+              oninput="app.searchFoods(this.value)">
+          </div>
+          <div id="searchResults" class="button-grid"></div>
+
+          <!-- Save Button -->
+          <button class="btn btn-success" onclick="app.saveFoodRecord()" style="width: 100%; margin-top: 1rem;">
+            ✅ 식단 기록 저장
+          </button>
+
+          <div id="foodMessage"></div>
+        </div>
+      </div>
+
+      <!-- Symptom Tab -->
+      <div id="symptomTab" class="tab-content">
+        <div class="card">
+          <h2>💊 증상 기록</h2>
+
+          <!-- Selection Summary -->
+          <div id="symptomSelection" class="selection-summary">
+            <div class="selection-placeholder">증상을 선택해주세요</div>
+          </div>
+
+          <!-- Main Symptoms -->
+          <h3>주요 증상</h3>
+          <div id="mainSymptoms" class="button-grid">
+            <div class="loading">로딩 중</div>
+          </div>
+
+          <!-- Save Button -->
+          <button class="btn btn-success" onclick="app.saveSymptomRecord()" style="width: 100%; margin-top: 1rem;">
+            ✅ 증상 기록 저장
+          </button>
+
+          <div id="symptomMessage"></div>
+        </div>
+      </div>
+
+      <!-- Records Tab -->
+      <div id="recordsTab" class="tab-content">
+        <div class="card">
+          <h2>📊 기록 보기</h2>
+
+          <div style="margin-bottom: 1rem;">
+            <button class="btn btn-outline" onclick="app.loadRecords(7)">최근 7일</button>
+            <button class="btn btn-outline" onclick="app.loadRecords(14)" style="margin-left: 0.5rem;">최근 14일</button>
+            <button class="btn btn-outline" onclick="app.loadRecords(30)" style="margin-left: 0.5rem;">최근 30일</button>
+          </div>
+
+          <div id="recordsContent" class="records-container">
+            <div class="loading">로딩 중</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analysis Tab -->
+      <div id="analysisTab" class="tab-content">
+        <div class="card">
+          <h2>📈 식단-증상 상관관계 분석</h2>
+          <p style="color: #666; margin-bottom: 1rem;">음식 섭취 후 시간대별 증상 발생 패턴을 분석합니다.</p>
+
+          <div style="margin-bottom: 1rem;">
+            <button class="btn btn-outline" onclick="app.loadAnalysis(7)">최근 7일</button>
+            <button class="btn btn-outline" onclick="app.loadAnalysis(14)" style="margin-left: 0.5rem;">최근 14일</button>
+            <button class="btn btn-outline" onclick="app.loadAnalysis(30)" style="margin-left: 0.5rem;">최근 30일</button>
+            <button class="btn btn-outline" onclick="app.loadAnalysis(0)" style="margin-left: 0.5rem;">전체 기간</button>
+          </div>
+
+          <div id="analysisContent" class="analysis-container">
+            <div class="empty-state">분석 기간을 선택해주세요</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
