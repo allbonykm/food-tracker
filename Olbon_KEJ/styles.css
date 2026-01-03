@@ -444,10 +444,11 @@ body {
 .col-menu {
   flex: 1;
   padding: var(--spacing-md);
+  text-align: center;
 }
 
 .col-flag {
-  width: 50px;
+  width: 60px;
   min-width: 50px;
   padding: var(--spacing-md);
   text-align: center;
@@ -591,3 +592,4 @@ input:focus {
     transition-duration: 0.01ms !important;
   }
 }
+
