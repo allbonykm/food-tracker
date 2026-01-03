@@ -302,7 +302,7 @@ const app = {
               </div>
               ${records.map(record => `
                 <div class="record-row">
-                  <span class="col-time">${record.time}</span>
+                  <span class="col-time">${this.formatTime(record.time)}</span>
                   <span class="col-menu">${record.menu}</span>
                   <span class="col-flag">${record.isChecked ? '💡' : ''}</span>
                 </div>
@@ -350,6 +350,38 @@ const app = {
             }
         } catch (e) { }
         return dateStr;
+    },
+
+    // 시간 포맷팅 (HH:MM 형식으로 정리)
+    formatTime(timeValue) {
+        if (!timeValue) return '--:--';
+
+        const timeStr = String(timeValue);
+
+        // 이미 HH:MM 형식이면 그대로 반환
+        const simpleMatch = timeStr.match(/^(\d{1,2}):(\d{2})$/);
+        if (simpleMatch) {
+            return `${simpleMatch[1].padStart(2, '0')}:${simpleMatch[2]}`;
+        }
+
+        // ISO 형식 또는 이상한 날짜 형식에서 시간 추출 (T 뒤의 시간 부분)
+        const isoMatch = timeStr.match(/T?(\d{1,2}):(\d{2})/);
+        if (isoMatch) {
+            return `${isoMatch[1].padStart(2, '0')}:${isoMatch[2]}`;
+        }
+
+        // 날짜 객체로 파싱 시도
+        try {
+            const dateObj = new Date(timeStr);
+            if (!isNaN(dateObj.getTime())) {
+                const hours = String(dateObj.getHours()).padStart(2, '0');
+                const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+                return `${hours}:${minutes}`;
+            }
+        } catch (e) { }
+
+        // 모든 시도가 실패하면 원본 반환 (너무 길면 자름)
+        return timeStr.length > 10 ? timeStr.substring(0, 10) + '...' : timeStr;
     },
 
     // 기록보기 주기적 새로고침 시작
