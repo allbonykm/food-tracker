@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="올본 식단기록표 사용 설명서">
+    <title>올본 식단기록표 사용 설명서</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Malgun Gothic', sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #4A90E2;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #4A90E2;
+        }
+
+        .intro {
+            text-align: center;
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        h2 {
+            color: #4A90E2;
+            font-size: 1.6em;
+            margin: 40px 0 20px 0;
+            padding: 15px;
+            background: linear-gradient(90deg, #e3f2fd 0%, #fff 100%);
+            border-left: 5px solid #4A90E2;
+            border-radius: 5px;
+        }
+
+        h3 {
+            color: #555;
+            font-size: 1.3em;
+            margin: 30px 0 15px 0;
+            padding-left: 10px;
+            border-left: 3px solid #64B5F6;
+        }
+
+        p {
+            margin: 15px 0;
+        }
+
+        ol,
+        ul {
+            margin: 15px 0 15px 30px;
+        }
+
+        li {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        .step-box {
+            background: #f0f7ff;
+            border: 1px solid #4A90E2;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .step-box strong {
+            color: #4A90E2;
+        }
+
+        .tip {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .lightbulb-section {
+            background: #FFF9E6;
+            border: 2px solid #FFD700;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .lightbulb-icon {
+            font-size: 3em;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .lightbulb-section h3 {
+            border: none;
+            padding: 0;
+            color: #8B6914;
+        }
+
+        .lightbulb-section p {
+            color: #8B6914;
+            font-size: 1.1em;
+        }
+
+        .faq {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+        }
+
+        .faq strong {
+            color: #4A90E2;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        hr {
+            border: none;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #4A90E2, transparent);
+            margin: 40px 0;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            font-size: 1.2em;
+        }
+
+        .back-link {
+            display: inline-block;
+            background: #4A90E2;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: #2E5C8A;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            h2 {
+                font-size: 1.4em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🏥 올본 식단기록표 사용 설명서</h1>
+
+        <div class="intro">
+            <p>안녕하세요, 올본한의원입니다. 😊</p>
+            <p><strong>권은재</strong> 님의 건강 관리를 위해 식단기록 앱을 준비했습니다.<br>
+                매일 드시는 음식을 간편하게 기록해 주세요!</p>
+        </div>
+
+        <h2>📱 1. 안드로이드 홈화면에 앱 추가하기</h2>
+        <p>앱을 홈화면에 추가하시면 일반 앱처럼 편리하게 바로 접속하실 수 있습니다!</p>
+
+        <div class="step-box">
+            <h3>Chrome 브라우저에서 추가하기</h3>
+            <ol>
+                <li><strong>Chrome 브라우저</strong>로 올본 식단기록표 앱에 접속해 주세요.</li>
+                <li>화면 <strong>오른쪽 상단</strong>의 <strong>점 세 개(⋮) 메뉴</strong>를 눌러주세요.</li>
+                <li><strong>'홈 화면에 추가'</strong> 또는 <strong>'앱 설치'</strong> 를 선택해 주세요.
+                    <div class="tip">💡 기기에 따라 메뉴 이름이 다를 수 있습니다</div>
+                </li>
+                <li>앱 이름을 확인하신 후 <strong>'추가'</strong> 또는 <strong>'설치'</strong> 버튼을 눌러주세요.</li>
+                <li>✅ 완료! 이제 홈화면에서 앱 아이콘을 찾으실 수 있습니다.</li>
+            </ol>
+        </div>
+
+        <hr>
+
+        <h2>🎯 2. 처음 사용할 때 - 자주 먹는 메뉴 등록</h2>
+        <p>앱을 처음 실행하면 <strong>"자주 먹는 메뉴 등록하기"</strong> 화면이 나타납니다.</p>
+
+        <div class="step-box">
+            <ol>
+                <li>입력창에 자주 드시는 음식 이름을 입력하세요.
+                    <ul>
+                        <li>예: 밥, 라면, 김밥, 떡볶이, 피자 등</li>
+                    </ul>
+                </li>
+                <li><strong>'➕ 추가'</strong> 버튼을 눌러 등록하세요.</li>
+                <li>여러 개를 등록할 수 있습니다. 많이 등록할수록 편리해요!</li>
+                <li>등록을 마치면 <strong>'✅ 입력완료 - 시작하기'</strong> 버튼을 눌러주세요.</li>
+            </ol>
+        </div>
+
+        <div class="warning">
+            ⚠️ 이 화면은 <strong>처음 한 번만</strong> 나타납니다. 다음에 앱을 열 때는 바로 메인 화면이 표시됩니다.
+        </div>
+
+        <hr>
+
+        <h2>🍽️ 3. 식단 기록하기</h2>
+        <p>음식을 드실 때마다 간편하게 기록해 주세요!</p>
+
+        <h3>방법 1: 자주 먹는 메뉴 버튼 누르기</h3>
+        <div class="step-box">
+            <ol>
+                <li><strong>'⭐ 자주 먹는 메뉴'</strong> 섹션에서 드신 음식 버튼을 찾으세요.</li>
+                <li>버튼을 <strong>한 번 누르면</strong> 바로 기록됩니다!</li>
+                <li>현재 날짜와 시간이 자동으로 함께 저장됩니다.</li>
+            </ol>
+        </div>
+
+        <h3>방법 2: 최근 등록 메뉴에서 선택하기</h3>
+        <p><strong>'🕐 최근 등록 메뉴'</strong> 섹션에는 최근에 기록한 메뉴들이 표시됩니다.<br>
+            이전에 입력한 메뉴를 빠르게 다시 기록할 수 있어요!</p>
+
+        <h3>방법 3: 목록에 없는 음식 직접 입력하기</h3>
+        <div class="step-box">
+            <ol>
+                <li><strong>'📝 목록에 없으면 입력'</strong> 섹션의 입력창을 찾아주세요.</li>
+                <li>음식 이름을 입력하세요. (예: 청국장, 수제버거, 아이스크림 등)</li>
+                <li><strong>'➕ 기록'</strong> 버튼을 누르면 바로 저장됩니다!</li>
+            </ol>
+        </div>
+
+        <div class="tip">
+            ✅ <strong>팁:</strong> 식사 직후 바로 기록하시면 잊어버리지 않아요!<br>
+            ✅ 아침, 점심, 저녁뿐만 아니라 <strong>간식이나 음료</strong>도 모두 기록해 주세요.
+        </div>
+
+        <hr>
+
+        <h2>📊 4. 기록 확인하기</h2>
+        <p>그동안 기록하신 식단을 날짜별로 확인하실 수 있습니다.</p>
+
+        <div class="step-box">
+            <ol>
+                <li>화면 상단의 <strong>'📊 기록 보기'</strong> 탭을 선택해 주세요.</li>
+                <li>날짜별로 정리된 식단 기록이 표시됩니다.</li>
+                <li>각 기록에는 <strong>시간</strong>과 <strong>메뉴</strong>가 함께 표시됩니다.</li>
+            </ol>
+        </div>
+
+        <hr>
+
+        <div class="lightbulb-section">
+            <span class="lightbulb-icon">💡</span>
+            <h3>전구 표시(💡)의 의미</h3>
+            <p>기록 옆에 <strong>💡 전구 표시</strong>가 보이면,<br>
+                <strong>해당 음식을 다른 식품으로 대체하는 것을 고려해 보세요!</strong>
+            </p>
+            <p style="margin-top: 15px; font-size: 0.95em; color: #666;">
+                한의원에서 기록을 검토한 후, 건강 관리에 도움이 되도록<br>
+                특정 음식에 표시를 해드립니다.
+            </p>
+        </div>
+
+        <hr>
+
+        <h2>❓ 자주 묻는 질문</h2>
+
+        <div class="faq">
+            <strong>Q. 인터넷 연결이 필요한가요?</strong>
+            <p>A. 네, 기록을 저장하고 한의원과 실시간으로 공유하기 위해 인터넷 연결이 필요합니다.</p>
+        </div>
+
+        <div class="faq">
+            <strong>Q. 기록한 내용을 의사 선생님이 볼 수 있나요?</strong>
+            <p>A. 네, 저장하신 모든 기록은 한의원에서 실시간으로 확인할 수 있어 진료 시 더욱 정확한 상담과 치료가 가능합니다.</p>
+        </div>
+
+        <div class="faq">
+            <strong>Q. 하루에 여러 번 기록할 수 있나요?</strong>
+            <p>A. 네! 아침, 점심, 저녁은 물론 간식을 드실 때마다 각각 기록하실 수 있습니다.</p>
+        </div>
+
+        <div class="faq">
+            <strong>Q. 앱이 작동하지 않아요!</strong>
+            <p>A. 앱을 완전히 종료하고 다시 실행해 보세요. 그래도 문제가 계속되면 한의원으로 연락 주세요.</p>
+        </div>
+
+        <div class="faq">
+            <strong>Q. 자주 먹는 메뉴를 추가하고 싶어요!</strong>
+            <p>A. 현재는 처음 설정 시에만 등록 가능합니다. 추가가 필요하시면 한의원에 말씀해 주세요.</p>
+        </div>
+
+        <div class="footer">
+            <h2>📞 문의하기</h2>
+            <p>앱 사용 중 궁금하신 점이나 문제가 있으시면<br>언제든지 올본한의원으로 연락 주세요!</p>
+            <p style="margin-top: 20px;">권은재 님의 건강한 일상을 함께 만들어가겠습니다. 💚</p>
+            <p style="margin-top: 20px; font-size: 1.3em;"><strong>올본한의원 드림</strong></p>
+            <a href="index.html" class="back-link">← 앱으로 돌아가기</a>
+        </div>
+    </div>
+</body>
+
+</html>
