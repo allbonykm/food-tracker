@@ -137,6 +137,9 @@ const app = {
     // 메인 데이터 로드
     async loadMainData() {
         try {
+            // 시간 지정 기록 폼 초기화
+            this.initManualEntryForm();
+
             await Promise.all([
                 this.loadFrequentMenus(),
                 this.loadRecentMenus()
@@ -261,6 +264,91 @@ const app = {
         input.value = '';
     },
 
+    // ==================== 시간 지정 기록 ====================
+
+    // 시간 지정 기록 폼 초기화
+    initManualEntryForm() {
+        const dateInput = document.getElementById('manualDate');
+        const timeInput = document.getElementById('manualTime');
+
+        if (dateInput && timeInput) {
+            const { date, time } = this.getKoreanDateTime();
+            dateInput.value = date;
+            timeInput.value = time;
+        }
+    },
+
+    // 시간 지정 기록 저장
+    async saveManualRecord() {
+        const dateInput = document.getElementById('manualDate');
+        const timeInput = document.getElementById('manualTime');
+        const menuInput = document.getElementById('manualMenu');
+
+        const date = dateInput.value;
+        const time = timeInput.value;
+        const menu = menuInput.value.trim();
+
+        if (!date || !time) {
+            this.showMessage('manualMessage', '날짜와 시간을 입력해주세요', 'error');
+            return;
+        }
+
+        if (!menu) {
+            this.showMessage('manualMessage', '메뉴를 입력해주세요', 'error');
+            return;
+        }
+
+        try {
+            await this.callApi('saveMenuRecord', {
+                date: date,
+                time: time,
+                menu: menu
+            });
+
+            const displayDate = date.substring(5).replace('-', '/');
+            this.showMessage('manualMessage', `✅ "${menu}" 기록됨 (${displayDate} ${time})`, 'success');
+
+            // 입력 필드 초기화 (날짜/시간은 현재로 리셋)
+            menuInput.value = '';
+            this.initManualEntryForm();
+
+            // 최근 메뉴 새로고침
+            await this.loadRecentMenus();
+
+        } catch (error) {
+            this.showMessage('manualMessage', '기록 실패: ' + error.message, 'error');
+        }
+    },
+
+    // ==================== 건의사항 ====================
+
+    // 건의사항 전송
+    async sendFeedback() {
+        const textArea = document.getElementById('feedbackText');
+        const content = textArea.value.trim();
+
+        if (!content) {
+            this.showMessage('feedbackMessage', '내용을 입력해주세요', 'error');
+            return;
+        }
+
+        const { date, time } = this.getKoreanDateTime();
+
+        try {
+            await this.callApi('saveFeedback', {
+                date: date,
+                time: time,
+                content: content
+            });
+
+            this.showMessage('feedbackMessage', '✅ 전송되었습니다. 감사합니다!', 'success');
+            textArea.value = '';
+
+        } catch (error) {
+            this.showMessage('feedbackMessage', '전송 실패: ' + error.message, 'error');
+        }
+    },
+
     // ==================== 기록 보기 ====================
 
     // 기록 조회
@@ -329,9 +417,9 @@ const app = {
             grouped[date].push(record);
         });
 
-        // 각 날짜의 기록을 시간순 오름차순 정렬
+        // 각 날짜의 기록을 시간순 내림차순 정렬 (최신순)
         Object.keys(grouped).forEach(date => {
-            grouped[date].sort((a, b) => a.time.localeCompare(b.time));
+            grouped[date].sort((a, b) => b.time.localeCompare(a.time));
         });
 
         return grouped;
