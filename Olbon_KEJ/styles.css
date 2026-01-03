@@ -426,11 +426,13 @@ body {
 }
 
 .col-time {
-  width: 70px;
+  width: 80px;
+  min-width: 80px;
   padding: var(--spacing-md);
   font-weight: 600;
   color: var(--primary-color);
   text-align: center;
+  white-space: nowrap;
 }
 
 .col-menu {
