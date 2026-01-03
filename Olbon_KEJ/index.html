@@ -34,8 +34,7 @@
                 <div class="onboarding-input-section">
                     <h3>🍽️ 자주 먹는 메뉴 등록하기</h3>
                     <div class="custom-input-container">
-                        <input type="text" id="onboardingInput" class="custom-input"
-                            placeholder="메뉴 이름 입력 (예: 닭가슴살)"
+                        <input type="text" id="onboardingInput" class="custom-input" placeholder="메뉴 이름 입력 (예: 닭가슴살)"
                             onkeypress="if(event.key==='Enter') app.addOnboardingMenu()">
                         <button class="btn btn-primary" onclick="app.addOnboardingMenu()">➕ 추가</button>
                     </div>
@@ -94,6 +93,46 @@
                     </div>
 
                     <div id="foodMessage"></div>
+                </div>
+
+                <!-- 시간 지정 기록 섹션 -->
+                <div class="card">
+                    <h2>⏰ 시간 지정 기록</h2>
+                    <p class="tab-description">과거에 먹은 것도 기록할 수 있어요</p>
+
+                    <div class="manual-entry-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="manualDate">날짜</label>
+                                <input type="date" id="manualDate" class="custom-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="manualTime">시간</label>
+                                <input type="time" id="manualTime" class="custom-input">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label for="manualMenu">메뉴</label>
+                                <input type="text" id="manualMenu" class="custom-input" placeholder="먹은 메뉴 입력...">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary full-width" onclick="app.saveManualRecord()">📝 기록하기</button>
+                    </div>
+                    <div id="manualMessage"></div>
+                </div>
+
+                <!-- 건의사항 섹션 -->
+                <div class="card">
+                    <h2>💬 할 말 있어요</h2>
+                    <p class="tab-description">건의사항이나 하고 싶은 말을 남겨주세요</p>
+
+                    <div class="feedback-form">
+                        <textarea id="feedbackText" class="custom-input feedback-textarea"
+                            placeholder="하고 싶은 말을 자유롭게 적어주세요..." rows="3"></textarea>
+                        <button class="btn btn-success full-width" onclick="app.sendFeedback()">📤 전송하기</button>
+                    </div>
+                    <div id="feedbackMessage"></div>
                 </div>
             </div>
 
